@@ -5,9 +5,9 @@ import 'package:dartz/dartz.dart';
 import 'package:blog/src/settings/domain/repositories/i_settings_repository.dart';
 
 class UpdateTheme extends Usecase<Unit, String> {
-  final ISettingsRepository _repository;
+  final ISettingRepository _repository;
   const UpdateTheme({
-    required ISettingsRepository repository,
+    required ISettingRepository repository,
   }) : _repository = repository;
 
   @override

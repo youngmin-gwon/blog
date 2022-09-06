@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:blog/src/settings/domain/entities/settings.dart';
-import 'package:blog/src/settings/infrastructure/models/settings_dto.dart';
+import 'package:blog/src/settings/domain/entities/setting.dart';
+import 'package:blog/src/settings/infrastructure/models/setting_dto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../fixtures/fixture_reader.dart';
 
 void main() {
-  const tSettingsDTO = SettingsDTO(
+  const tSettingsDTO = SettingDTO(
     themeMode: 'system',
   );
-  const tSettingsDTODark = SettingsDTO(
+  const tSettingsDTODark = SettingDTO(
     themeMode: 'dark',
   );
 
@@ -18,7 +18,7 @@ void main() {
     "should be a subclasss of Settings entity",
     () async {
       // assert
-      expect(tSettingsDTO.toDomain(), isA<Settings>());
+      expect(tSettingsDTO.toDomain(), isA<Setting>());
     },
   );
 
@@ -30,10 +30,10 @@ void main() {
         () async {
           /// arrange
           final Map<String, dynamic> jsonMap =
-              json.decode(fixture('settings_null.json'));
+              json.decode(fixture('setting_null.json'));
 
           /// act
-          final result = SettingsDTO.fromMap(jsonMap);
+          final result = SettingDTO.fromMap(jsonMap);
 
           /// assert
           expect(result, tSettingsDTO);
@@ -45,10 +45,10 @@ void main() {
         () async {
           /// arrange
           final Map<String, dynamic> jsonMap =
-              json.decode(fixture('settings.json'));
+              json.decode(fixture('setting.json'));
 
           /// act
-          final result = SettingsDTO.fromMap(jsonMap);
+          final result = SettingDTO.fromMap(jsonMap);
 
           /// assert
           expect(result, tSettingsDTODark);

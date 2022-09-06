@@ -1,6 +1,6 @@
-class Settings {
+class Setting {
   final String themeMode;
-  const Settings({
+  const Setting({
     required this.themeMode,
   });
 
@@ -8,16 +8,16 @@ class Settings {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Settings && other.themeMode == themeMode;
+    return other is Setting && other.themeMode == themeMode;
   }
 
   @override
   int get hashCode => themeMode.hashCode;
 
-  Settings copyWith({
+  Setting copyWith({
     String? themeMode,
   }) {
-    return Settings(
+    return Setting(
       themeMode: themeMode ?? this.themeMode,
     );
   }

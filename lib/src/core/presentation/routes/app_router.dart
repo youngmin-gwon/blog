@@ -1,9 +1,9 @@
 import 'package:blog/src/core/presentation/pages/home_screen.dart';
 import 'package:blog/src/core/presentation/pages/error_screen.dart';
-import 'package:blog/src/settings/presentation/settings_screen.dart';
+import 'package:blog/src/settings/presentation/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'app_route_observer.dart';
 
@@ -29,9 +29,9 @@ class AppRouter extends GoRouter {
                   const MaterialPage(child: HomeScreen()),
             ),
             GoRoute(
-              path: '/settings',
+              path: '/setting',
               pageBuilder: (context, state) => const MaterialPage(
-                child: SettingsScreen(),
+                child: SettingScreen(),
               ),
             ),
           ],

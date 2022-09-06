@@ -1,8 +1,8 @@
 import 'package:blog/src/settings/dependency_injection.dart';
 import 'package:blog/src/settings/infrastructure/datasources/local/settings_local_hive_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:blog/src/app.dart';
 
@@ -12,17 +12,17 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  final settingsService = SettingsLocalHiveService();
+  final settingService = SettingLocalHiveService();
 
-  await settingsService.initializeDatabase();
+  await settingService.initializeDatabase();
 
-  final settings = settingsService.savedSettings.toDomain();
+  final setting = settingService.savedSettings.toDomain();
 
   runApp(
     ProviderScope(
       overrides: [
-        settingsHiveServiceProvider.overrideWithValue(settingsService),
-        settingsProvider.overrideWithValue(StateController(settings))
+        settingHiveServiceProvider.overrideWithValue(settingService),
+        settingProvider.overrideWithValue(StateController(setting))
       ],
       child: const App(),
     ),

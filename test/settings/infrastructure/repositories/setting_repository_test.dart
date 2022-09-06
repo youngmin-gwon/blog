@@ -1,28 +1,28 @@
 import 'package:blog/src/core/domain/entities/exceptions.dart';
 import 'package:blog/src/core/domain/entities/failure.dart';
-import 'package:blog/src/settings/domain/entities/settings.dart';
-import 'package:blog/src/settings/infrastructure/models/settings_dto.dart';
-import 'package:blog/src/settings/infrastructure/repositories/settings_repository.dart';
+import 'package:blog/src/settings/domain/entities/setting.dart';
+import 'package:blog/src/settings/infrastructure/models/setting_dto.dart';
+import 'package:blog/src/settings/infrastructure/repositories/setting_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'mocks/mock_settings_service.dart';
+import 'mocks/mock_setting_service.dart';
 
 void main() {
-  late SettingsRepository repository;
-  late MockSettingsService mockService;
+  late SettingRepository repository;
+  late MockSettingService mockService;
   setUp(
     () {
-      mockService = MockSettingsService();
-      repository = SettingsRepository(
+      mockService = MockSettingService();
+      repository = SettingRepository(
         service: mockService,
       );
     },
   );
 
   const tTheme = 'dark';
-  const tSettings = Settings(
+  const tSettings = Setting(
     themeMode: tTheme,
   );
 
@@ -34,7 +34,7 @@ void main() {
         () async {
           /// arrange
           when(() => mockService.themeMode)
-              .thenAnswer((_) async => SettingsDTO.fromDomain(tSettings));
+              .thenAnswer((_) async => SettingDTO.fromDomain(tSettings));
 
           /// act
           final result = await repository.loadTheme();
@@ -53,10 +53,10 @@ void main() {
               .thenThrow(const InternalCacheException(message: ""));
 
           /// act
-          final result = await repository.loadTheme();
+          final results = await repository.loadTheme();
 
           /// assert
-          expect(result, const Left(Failure.internal("")));
+          expect(results, isA<Left<Failure, Setting>>());
           verify(() => mockService.themeMode);
           verifyNoMoreInteractions(mockService);
         },
@@ -95,7 +95,7 @@ void main() {
           final result = await repository.updateTheme(tTheme);
 
           /// assert
-          expect(result, const Left(Failure.internal("")));
+          expect(result, isA<Left<Failure, Unit>>());
           verify(() => mockService.updateThemeMode(tTheme));
           verifyNoMoreInteractions(mockService);
         },

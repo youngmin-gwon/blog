@@ -1,15 +1,19 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+abstract class Failure {
+  const Failure();
 
-part 'failure.freezed.dart';
+  const factory Failure.internal(String message) = InternalFailure;
+}
 
-@freezed
-class Failure with _$Failure {
-  const Failure._();
-  const factory Failure.internal([String? message]) = _Internal;
+class InternalFailure implements Failure {
+  const InternalFailure(this.message);
+
+  final String message;
 }
 
 String mapFailureToString(Failure failure) {
-  return failure.when(
-    internal: (String? message) => message ?? "Internal issue has been occured",
-  );
+  // return failure.when(
+  //   internal: (String? message) => message ?? "Internal issue has been occured",
+  // );
+
+  return "";
 }

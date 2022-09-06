@@ -3,15 +3,15 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'mocks/mock_settings_repository.dart';
+import 'mocks/mock_i_setting_repository.dart';
 
 void main() {
-  late MockISettingsRepository mockRepository;
+  late MockISettingRepository mockRepository;
   late UpdateTheme usecase;
 
   setUp(
     () {
-      mockRepository = MockISettingsRepository();
+      mockRepository = MockISettingRepository();
       usecase = UpdateTheme(
         repository: mockRepository,
       );

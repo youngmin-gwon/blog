@@ -1,29 +1,29 @@
-import 'package:blog/src/settings/application/settings_event.dart';
+import 'package:blog/src/settings/application/setting_event.dart';
 import 'package:blog/src/settings/dependency_injection.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
-class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class SettingScreen extends ConsumerStatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingScreen> {
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(settingsProvider);
+    final settings = ref.watch(settingProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Settings',
+          'Setting',
           style: TextStyle(
             color: Theme.of(context).textTheme.headline6?.color,
           ),
@@ -42,12 +42,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Call the updateThemeMode method any time the user selects a theme.
           onChanged: (ThemeMode? themeMode) {
             if (themeMode != null) {
-              ref.watch(settingsProvider.notifier).state = settings.copyWith(
+              ref.watch(settingProvider.notifier).state = settings.copyWith(
                 themeMode: themeMode.name,
               );
 
-              ref.read(settingsStateNotifierProvider.notifier).mapEventToState(
-                    SettingsEvent.updateThemeMode(themeMode.name),
+              ref.read(settingStateNotifierProvider.notifier).mapEventToState(
+                    SettingEvent.updateThemeMode(themeMode.name),
                   );
             }
           },

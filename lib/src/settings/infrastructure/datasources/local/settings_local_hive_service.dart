@@ -1,24 +1,23 @@
-import 'package:blog/src/settings/infrastructure/datasources/settings_service.dart';
-import 'package:blog/src/settings/infrastructure/models/settings_dto.dart';
+import 'package:blog/src/settings/infrastructure/datasources/setting_service.dart';
+import 'package:blog/src/settings/infrastructure/models/setting_dto.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class SettingsLocalHiveService implements SettingsService {
+class SettingLocalHiveService implements SettingService {
   late final Box<String> settingBox;
 
-  SettingsDTO get savedSettings =>
-      SettingsDTO.fromJson(settingBox.values.first);
+  SettingDTO get savedSettings => SettingDTO.fromJson(settingBox.values.first);
 
   Future<void> initializeDatabase() async {
-    await Hive.openBox<String>('settings').then((value) => settingBox = value);
+    await Hive.openBox<String>('setting').then((value) => settingBox = value);
 
     // first time loading
     if (settingBox.values.isEmpty) {
-      settingBox.add(const SettingsDTO(themeMode: "system").toJson());
+      settingBox.add(const SettingDTO(themeMode: "system").toJson());
     }
   }
 
   @override
-  Future<SettingsDTO> get themeMode async => savedSettings;
+  Future<SettingDTO> get themeMode async => savedSettings;
 
   @override
   Future<void> updateThemeMode(String themeMode) async {

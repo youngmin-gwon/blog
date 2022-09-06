@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         iconTheme: Theme.of(context).iconTheme,
         actions: [
           IconButton(
-            onPressed: () => context.push('/settings'),
+            onPressed: () => context.push('/setting'),
             icon: const Icon(Icons.settings),
           ),
         ],
