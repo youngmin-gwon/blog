@@ -1,18 +1,13 @@
 import 'package:blog/src/settings/application/setting_state.dart';
-import 'package:blog/src/settings/application/settings_state_notifier.dart';
-import 'package:blog/src/settings/domain/entities/setting.dart';
-import 'package:blog/src/settings/domain/repositories/i_settings_repository.dart';
-import 'package:blog/src/settings/domain/usecases/load_theme.dart';
-import 'package:blog/src/settings/domain/usecases/update_theme.dart';
-import 'package:blog/src/settings/infrastructure/datasources/local/settings_local_hive_service.dart';
-import 'package:blog/src/settings/infrastructure/datasources/setting_service.dart';
-import 'package:blog/src/settings/infrastructure/repositories/setting_repository.dart';
+import 'package:blog/src/settings/application/setting_state_notifier.dart';
+import 'package:blog/src/settings/domain/repository/i_settings_repository.dart';
+import 'package:blog/src/settings/domain/usecase/load_theme.dart';
+import 'package:blog/src/settings/domain/usecase/update_theme.dart';
+import 'package:blog/src/settings/infrastructure/datasource/local/settings_local_hive_service.dart';
+import 'package:blog/src/settings/infrastructure/datasource/setting_service.dart';
+import 'package:blog/src/settings/infrastructure/repository/setting_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-//! Presentation
-final settingProvider = StateProvider<Setting>(
-  (ref) => throw UnimplementedError(),
-);
+import 'package:hive_flutter/hive_flutter.dart';
 
 //! Application
 final settingStateNotifierProvider =
@@ -24,13 +19,13 @@ final settingStateNotifierProvider =
 );
 
 //! Usecases
-final loadThemeProvider = Provider<LoadTheme>(
+final loadThemeProvider = Provider(
   (ref) => LoadTheme(
     repository: ref.watch(settingRepositoryProvider),
   ),
 );
 
-final updateThemeProvider = Provider<UpdateTheme>(
+final updateThemeProvider = Provider(
   (ref) => UpdateTheme(
     repository: ref.watch(settingRepositoryProvider),
   ),
@@ -45,5 +40,9 @@ final settingRepositoryProvider = Provider<ISettingRepository>(
 
 //! Datasource
 final settingHiveServiceProvider = Provider<SettingService>(
-  (ref) => SettingLocalHiveService(),
+  (ref) => SettingLocalHiveService(storage: ref.watch(hiveStringBoxProvider)),
+);
+
+final hiveStringBoxProvider = Provider<Box<String>>(
+  (ref) => throw UnimplementedError(),
 );

@@ -17,7 +17,7 @@ class SettingScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingScreen> {
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(settingProvider);
+    final settings = ref.watch(settingStateNotifierProvider.notifier).setting;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -42,10 +42,6 @@ class _SettingsScreenState extends ConsumerState<SettingScreen> {
           // Call the updateThemeMode method any time the user selects a theme.
           onChanged: (ThemeMode? themeMode) {
             if (themeMode != null) {
-              ref.watch(settingProvider.notifier).state = settings.copyWith(
-                themeMode: themeMode.name,
-              );
-
               ref.read(settingStateNotifierProvider.notifier).mapEventToState(
                     SettingEvent.updateThemeMode(themeMode.name),
                   );

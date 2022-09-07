@@ -9,7 +9,7 @@ class LoadThemeEvent implements SettingEvent {
 }
 
 class UpdateThemeModeEvent implements SettingEvent {
-  const UpdateThemeModeEvent(this.theme);
+  const UpdateThemeModeEvent(this.themeMode);
 
-  final String theme;
+  final String themeMode;
 }

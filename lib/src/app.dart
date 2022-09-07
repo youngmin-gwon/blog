@@ -22,7 +22,7 @@ class _AppState extends ConsumerState<App> {
   void initState() {
     super.initState();
     Future.microtask(
-      () async {
+      () {
         ref
             .read(settingStateNotifierProvider.notifier)
             .mapEventToState(const SettingEvent.loadTheme());
@@ -32,7 +32,8 @@ class _AppState extends ConsumerState<App> {
 
   @override
   Widget build(BuildContext context) {
-    final setting = ref.watch(settingProvider);
+    ref.watch(settingStateNotifierProvider);
+    final setting = ref.watch(settingStateNotifierProvider.notifier).setting;
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(

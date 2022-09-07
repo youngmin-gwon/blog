@@ -1,201 +1,314 @@
-// import 'package:blog/src/core/domain/entities/failure.dart';
-// import 'package:blog/src/core/domain/entities/no_params.dart';
-// import 'package:blog/src/settings/application/setting_event.dart';
-// import 'package:blog/src/settings/application/setting_state.dart';
-// import 'package:blog/src/settings/dependency_injection.dart';
-// import 'package:blog/src/settings/domain/entities/setting.dart';
-// import 'package:dartz/dartz.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:mocktail/mocktail.dart';
+import 'package:blog/src/core/domain/entities/failure.dart';
+import 'package:blog/src/core/domain/entities/no_params.dart';
+import 'package:blog/src/settings/application/setting_event.dart';
+import 'package:blog/src/settings/application/setting_state.dart';
+import 'package:blog/src/settings/dependency_injection.dart';
+import 'package:blog/src/settings/domain/entity/setting.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-// import 'mocks/mock_usecases.dart';
+import 'mock/mock_usecases.dart';
 
 void main() {
-  // late MockUpdateTheme mockUpdateTheme;
-  // late MockLoadTheme mockLoadTheme;
+  late MockUpdateTheme mockUpdateTheme;
+  late MockLoadTheme mockLoadTheme;
 
-  // const internalErrorMessage = 'Internal Error';
+  setUp(
+    () {
+      mockUpdateTheme = MockUpdateTheme();
+      mockLoadTheme = MockLoadTheme();
+    },
+  );
 
-  // setUp(
-  //   () {
-  //     mockUpdateTheme = MockUpdateTheme();
-  //     mockLoadTheme = MockLoadTheme();
-  //   },
-  // );
+  setUpAll(
+    () {
+      // any()자리에 해당 Parameter를 넣을 수  있게 만들어줌
+      registerFallbackValue(const NoParams());
+    },
+  );
 
-  // setUpAll(
-  //   () {
-  //     // any()자리에 해당 Parameter를 넣을 수  있게 만들어줌
-  //     registerFallbackValue(const NoParams());
-  //   },
-  // );
+  Future<void> setUpProviderContainer(
+      Future<void> Function(ProviderContainer ref) onProcess) async {
+    final container = ProviderContainer(
+      overrides: [
+        loadThemeProvider.overrideWithValue(mockLoadTheme),
+        updateThemeProvider.overrideWithValue(mockUpdateTheme),
+      ],
+    );
+    await onProcess(container);
+    addTearDown(container.dispose);
+  }
 
-  // ProviderContainer _setProviderContainerForTest() {
-  //   final container = ProviderContainer(
-  //     overrides: [
-  //       loadThemeProvider.overrideWithValue(mockLoadTheme),
-  //       updateThemeProvider.overrideWithValue(mockUpdateTheme),
-  //     ],
-  //   );
-  //   addTearDown(container.dispose);
-  //   return container;
-  // }
+  test(
+    'initial state should be stable',
+    () async {
+      setUpProviderContainer(
+        (ref) async {
+          expect(ref.read(settingStateNotifierProvider),
+              const SettingState.stable());
+        },
+      );
+    },
+  );
+  group(
+    'loadTheme',
+    () {
+      const tSettingSystem = Setting(themeMode: 'system');
+      const tSettingDark = Setting(themeMode: 'dark');
 
-  // test(
-  //   'initial state should be empty',
-  //   () async {
-  //     // should write line underneath for test
-  //     final container = _setProviderContainerForTest();
-  //     expect(container.read(settingStateNotifierProvider),
-  //         const SettingState.empty());
-  //   },
-  // );
+      test(
+        'should pass the call for the use case',
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockLoadTheme(any()))
+                  .thenAnswer((_) async => const Right(tSettingDark));
 
-  // group(
-  //   'UpdateTheme',
-  //   () {
-  //     // The event takes in a String
-  //     const tTheme = 'dark';
-  //     // Settings Instance
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.loadTheme());
+              await untilCalled(() => mockLoadTheme(any()));
 
-  //     test(
-  //       'should pass the call for the concrete use case',
-  //       () async {
-  //         final container = _setProviderContainerForTest();
-  //         when(() => mockUpdateTheme(any()))
-  //             .thenAnswer((_) async => const Right(unit));
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
-  //         await untilCalled(() => mockUpdateTheme(any()));
+              // assert
+              verify(() => mockLoadTheme(const NoParams()));
+            },
+          );
+        },
+      );
 
-  //         verify(() => mockUpdateTheme(tTheme));
-  //       },
-  //     );
+      test(
+        "should emit [loading, stable] when loading data succeeds",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockLoadTheme(any()))
+                  .thenAnswer((_) async => const Right(tSettingDark));
 
-  //     test(
-  //       "should emit [saving, saved] when setting data succeeds",
-  //       () async {
-  //         final container = _setProviderContainerForTest();
-  //         when(() => mockUpdateTheme(any()))
-  //             .thenAnswer((_) async => const Right(unit));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.empty());
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.loadTheme());
 
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.loading());
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.saving());
+              // acting
+              await untilCalled(() => mockLoadTheme(any()));
+              await Future.microtask(() {});
 
-  //         await untilCalled(() => mockUpdateTheme(any()));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingDark);
+            },
+          );
+        },
+      );
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.saved());
-  //       },
-  //     );
+      test(
+        "should emit [loading, error, loading, stable] when setting data fails at first trial and succeeds finally",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockLoadTheme(any()))
+                  .thenAnswer((_) async => const Left(Failure.internal("")));
 
-  //     test(
-  //       "should emit [saving, error] when setting data fails",
-  //       () async {
-  //         final container = _setProviderContainerForTest();
-  //         addTearDown(container.dispose);
-  //         when(() => mockUpdateTheme(any())).thenAnswer(
-  //             (_) async => Left(Failure.internal(internalErrorMessage)));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.empty());
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.loadTheme());
 
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.loading());
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.saving());
+              // acting
+              await untilCalled(() => mockLoadTheme(any()));
+              await Future.microtask(() {});
 
-  //         await untilCalled(() => mockUpdateTheme(any()));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.error());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.error());
-  //       },
-  //     );
-  //   },
-  // );
+              // arrange
+              when(() => mockLoadTheme(any()))
+                  .thenAnswer((_) async => const Right(tSettingDark));
 
-  // group(
-  //   'LoadTheme',
-  //   () {
-  //     const tSettings = Setting(themeMode: 'system');
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.loadTheme());
 
-  //     test(
-  //       "should get data from the usecase",
-  //       () async {
-  //         final container = _setProviderContainerForTest();
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.loading());
 
-  //         when(() => mockLoadTheme(any()))
-  //             .thenAnswer((_) async => const Right(tSettings));
+              // acting
+              await untilCalled(() => mockLoadTheme(any()));
+              await Future.microtask(() {});
 
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.loadTheme());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingDark);
+            },
+          );
+        },
+      );
+    },
+  );
 
-  //         await untilCalled(() => mockLoadTheme(any()));
+  group(
+    'UpdateTheme',
+    () {
+      const tTheme = 'dark';
 
-  //         verify(() => mockLoadTheme(any()));
-  //       },
-  //     );
+      const tSettingSystem = Setting(themeMode: "system");
+      const tSettingDark = Setting(themeMode: tTheme);
 
-  //     test(
-  //       "should emit [loading, loaded] when getting data succeeds",
-  //       () async {
-  //         final container = _setProviderContainerForTest();
-  //         when(() => mockLoadTheme(any())).thenAnswer(
-  //           (_) async => const Right(tSettings),
-  //         );
+      test(
+        'should pass the call for the use case',
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockUpdateTheme(any()))
+                  .thenAnswer((_) async => const Right(unit));
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.empty());
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
+              await untilCalled(() => mockUpdateTheme(any()));
 
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.loadTheme());
+              // assert
+              verify(() => mockUpdateTheme(tTheme));
+            },
+          );
+        },
+      );
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.loading());
+      test(
+        "should emit [saving, stable] when setting data succeeds",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockUpdateTheme(any()))
+                  .thenAnswer((_) async => const Right(unit));
 
-  //         await untilCalled(() => mockLoadTheme(any()));
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.loaded());
-  //       },
-  //     );
-  //     test(
-  //       "should emit [loading, error] when getting data fails",
-  //       () async {
-  //         final container = _setProviderContainerForTest();
-  //         when(() => mockLoadTheme(any())).thenAnswer(
-  //           (_) async => const Left(Failure.internal(internalErrorMessage)),
-  //         );
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.empty());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
 
-  //         container
-  //             .read(settingStateNotifierProvider.notifier)
-  //             .mapEventToState(const SettingEvent.loadTheme());
+              // acting
+              await untilCalled(() => mockUpdateTheme(any()));
+              await Future.microtask(() {});
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.loading());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingDark);
+            },
+          );
+        },
+      );
 
-  //         await untilCalled(() => mockLoadTheme(any()));
+      test(
+        "should emit [saving, error, saving, stable] when setting data fails at first trial and succeeds finally",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockUpdateTheme(any()))
+                  .thenAnswer((_) async => const Left(Failure.internal("")));
 
-  //         expect(container.read(settingStateNotifierProvider),
-  //             const SettingState.error());
-  //       },
-  //     );
-  //   },
-  // );
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
+
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
+
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
+
+              // acting
+              await untilCalled(() => mockUpdateTheme(any()));
+              await Future.microtask(() {});
+
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.error());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
+
+              // arrange
+              when(() => mockUpdateTheme(any()))
+                  .thenAnswer((_) async => const Right(unit));
+
+              // act
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
+
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
+
+              // acting
+              await untilCalled(() => mockUpdateTheme(any()));
+              await Future.microtask(() {});
+
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingDark);
+            },
+          );
+        },
+      );
+    },
+  );
 }

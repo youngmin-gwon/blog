@@ -1,0 +1,1 @@
+const kSettingStorageKey = "key-setting";

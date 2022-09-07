@@ -1,5 +1,4 @@
 import 'package:blog/src/settings/dependency_injection.dart';
-import 'package:blog/src/settings/infrastructure/datasources/local/settings_local_hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,18 +11,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  final settingService = SettingLocalHiveService();
-
-  await settingService.initializeDatabase();
-
-  final setting = settingService.savedSettings.toDomain();
+  final stringBoxStorage = await Hive.openBox<String>('setting');
 
   runApp(
     ProviderScope(
-      overrides: [
-        settingHiveServiceProvider.overrideWithValue(settingService),
-        settingProvider.overrideWithValue(StateController(setting))
-      ],
+      overrides: [hiveStringBoxProvider.overrideWithValue(stringBoxStorage)],
       child: const App(),
     ),
   );

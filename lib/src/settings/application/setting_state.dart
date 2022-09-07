@@ -1,23 +1,22 @@
-import 'package:blog/src/settings/application/settings_state_notifier.dart';
+import 'package:blog/src/core/domain/entities/no_params.dart';
+import 'package:blog/src/settings/application/setting_event.dart';
+import 'package:blog/src/settings/application/setting_state_notifier.dart';
 
 abstract class SettingState {
-  const factory SettingState.empty() = SettingEmptyState;
+  const factory SettingState.stable() = SettingStableState;
   const factory SettingState.loading() = SettingLoadingState;
-  const factory SettingState.loaded() = SettingLoadedState;
   const factory SettingState.saving() = SettingSavingState;
-  const factory SettingState.saved() = SettingSavedState;
   const factory SettingState.error() = SettingErrorState;
 
   Future<void> nextState(SettingStateNotifier context);
 }
 
-class SettingEmptyState implements SettingState {
-  const SettingEmptyState();
+class SettingStableState implements SettingState {
+  const SettingStableState();
 
   @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
+  Future<void> nextState(SettingStateNotifier context) async {
+    context.branchSavingAndLoading();
   }
 }
 
@@ -25,19 +24,18 @@ class SettingLoadingState implements SettingState {
   const SettingLoadingState();
 
   @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
-  }
-}
-
-class SettingLoadedState implements SettingState {
-  const SettingLoadedState();
-
-  @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
+  Future<void> nextState(SettingStateNotifier context) async {
+    final resultsOrFailure = await context.loadTheme(const NoParams());
+    resultsOrFailure.fold(
+      (l) {
+        context.failure = l;
+        context.setState(const SettingState.error());
+      },
+      (r) {
+        context.setting = r;
+        context.setState(const SettingState.stable());
+      },
+    );
   }
 }
 
@@ -45,19 +43,23 @@ class SettingSavingState implements SettingState {
   const SettingSavingState();
 
   @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
-  }
-}
+  Future<void> nextState(SettingStateNotifier context) async {
+    final previousSetting = context.setting.copyWith();
+    final themeMode = (context.currentEvent as UpdateThemeModeEvent).themeMode;
 
-class SettingSavedState implements SettingState {
-  const SettingSavedState();
+    context.setting = previousSetting.copyWith(themeMode: themeMode);
 
-  @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
+    final resultsOrFailure = await context.updateTheme(themeMode);
+    resultsOrFailure.fold(
+      (l) {
+        context.failure = l;
+        context.setting = previousSetting;
+        context.setState(const SettingState.error());
+      },
+      (r) {
+        context.setState(const SettingState.stable());
+      },
+    );
   }
 }
 
@@ -65,8 +67,7 @@ class SettingErrorState implements SettingState {
   const SettingErrorState();
 
   @override
-  Future<void> nextState(SettingStateNotifier context) {
-    // TODO: implement nextState
-    throw UnimplementedError();
+  Future<void> nextState(SettingStateNotifier context) async {
+    context.branchSavingAndLoading();
   }
 }
