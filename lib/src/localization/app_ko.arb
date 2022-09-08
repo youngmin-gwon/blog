@@ -1,6 +1,6 @@
 {
-  "appTitle": "블로그",
+  "appTitle": "영민의 포트폴리오",
   "@appTitle": {
-    "description": "Flutter로 작업한 개인 블로그"
+    "description": "작업, 관심사에 관한 모든 것"
   }
 }

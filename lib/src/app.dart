@@ -1,7 +1,7 @@
 import 'package:blog/src/core/presentation/constants/index.dart';
-import 'package:blog/src/core/presentation/routes/app_router.dart';
-import 'package:blog/src/settings/application/setting_event.dart';
-import 'package:blog/src/settings/dependency_injection.dart';
+import 'package:blog/src/core/presentation/route/app_router.dart';
+import 'package:blog/src/setting/application/setting_event.dart';
+import 'package:blog/src/setting/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -47,14 +47,14 @@ class _AppState extends ConsumerState<App> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('ko', ''),
         Locale('en', ''), // English, no country code
+        Locale('ko', ''),
       ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.values.byName(setting.themeMode),
+      themeMode: ThemeMode.values.byName(setting.themeMode.name),
     );
   }
 }

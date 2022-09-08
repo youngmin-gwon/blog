@@ -1,6 +1,6 @@
 {
-  "appTitle": "Blog",
+  "appTitle": "Youngmin's Portfolio",
   "@appTitle": {
-    "description": "Personal Blog powered by Flutter"
+    "description": "All about him including works, interests"
   }
 }
