@@ -1,10 +1,10 @@
 import 'package:blog/src/core/constant.dart';
-import 'package:blog/src/settings/infrastructure/datasource/setting_service.dart';
+import 'package:blog/src/settings/infrastructure/datasource/setting_local_service.dart';
 import 'package:blog/src/settings/infrastructure/model/setting_dto.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class SettingLocalHiveService implements SettingService {
-  SettingLocalHiveService({
+class SettingLocalHiveService implements SettingLocalService {
+  const SettingLocalHiveService({
     required Box<String> storage,
   }) : _storage = storage;
 
@@ -12,15 +12,20 @@ class SettingLocalHiveService implements SettingService {
 
   @override
   Future<SettingDTO> get setting async {
-    final settingsJsonString = _storage.get(kSettingStorageKey);
+    final settingsJsonString = _storage.get(kSettingValueKey);
 
     return SettingDTO.fromJson(
-        settingsJsonString ?? const SettingDTO(themeMode: "system").toJson());
+        settingsJsonString ?? SettingDTO.initial().toJson());
   }
 
   @override
-  Future<void> updateThemeMode(String themeMode) async {
-    _storage.put(kSettingStorageKey,
+  Future<void> saveThemeMode(String themeMode) async {
+    _storage.put(kSettingValueKey,
         (await setting).copyWith(themeMode: themeMode).toJson());
+  }
+
+  @override
+  Future<void> saveLanguageSetting(String langCode) async {
+    _storage.put(kSettingValueKey, (await setting).copyWith().toJson());
   }
 }

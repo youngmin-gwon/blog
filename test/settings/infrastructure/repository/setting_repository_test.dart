@@ -16,15 +16,13 @@ void main() {
     () {
       mockService = MockSettingService();
       repository = SettingRepository(
-        service: mockService,
+        localService: mockService,
       );
     },
   );
 
   const tTheme = 'dark';
-  const tSettings = Setting(
-    themeMode: tTheme,
-  );
+  final tSettings = Setting.initial();
 
   group(
     'loadTheme',
@@ -37,10 +35,10 @@ void main() {
               .thenAnswer((_) async => SettingDTO.fromDomain(tSettings));
 
           /// act
-          final result = await repository.loadTheme();
+          final result = await repository.loadSetting();
 
           /// assert
-          expect(result, const Right(tSettings));
+          expect(result, Right(tSettings));
           verify(() => mockService.setting);
         },
       );
@@ -53,7 +51,7 @@ void main() {
               .thenThrow(const InternalCacheException(message: ""));
 
           /// act
-          final results = await repository.loadTheme();
+          final results = await repository.loadSetting();
 
           /// assert
           expect(results, isA<Left<Failure, Setting>>());
@@ -71,15 +69,14 @@ void main() {
         "should pass the call when the service call is successful",
         () async {
           /// arrange
-          when(() => mockService.updateThemeMode(any()))
-              .thenAnswer((_) async {});
+          when(() => mockService.saveThemeMode(any())).thenAnswer((_) async {});
 
           /// act
-          final result = await repository.updateTheme(tTheme);
+          final result = await repository.updateThememode(tTheme);
 
           /// assert
           expect(result, const Right(unit));
-          verify(() => mockService.updateThemeMode(tTheme));
+          verify(() => mockService.saveThemeMode(tTheme));
           verifyNoMoreInteractions(mockService);
         },
       );
@@ -88,15 +85,15 @@ void main() {
         "should throw InternalCacheException when the service call is not successful",
         () async {
           /// arrange
-          when(() => mockService.updateThemeMode(any()))
+          when(() => mockService.saveThemeMode(any()))
               .thenThrow(const InternalCacheException(message: ""));
 
           /// act
-          final result = await repository.updateTheme(tTheme);
+          final result = await repository.updateThememode(tTheme);
 
           /// assert
           expect(result, isA<Left<Failure, Unit>>());
-          verify(() => mockService.updateThemeMode(tTheme));
+          verify(() => mockService.saveThemeMode(tTheme));
           verifyNoMoreInteractions(mockService);
         },
       );

@@ -10,8 +10,7 @@ void main() {
   late MockHiveStringBox storage;
   late SettingLocalHiveService localService;
 
-  const tSettingDto = SettingDTO(themeMode: "light");
-  const tSettingDtoDefault = SettingDTO(themeMode: "system");
+  final tSettingDto = SettingDTO.initial();
 
   setUp(
     () {
@@ -34,7 +33,7 @@ void main() {
           final results = await localService.setting;
 
           // assert
-          verify(() => storage.get(kSettingStorageKey));
+          verify(() => storage.get(kSettingValueKey));
           expect(results, tSettingDto);
         },
       );
@@ -49,8 +48,8 @@ void main() {
           final results = await localService.setting;
 
           // assert
-          verify(() => storage.get(kSettingStorageKey));
-          expect(results, tSettingDtoDefault);
+          verify(() => storage.get(kSettingValueKey));
+          expect(results, tSettingDto);
         },
       );
     },
@@ -67,9 +66,9 @@ void main() {
               .thenAnswer((invocation) => Future.value());
 
           // act
-          await localService.updateThemeMode(tSettingDto.themeMode);
+          await localService.saveThemeMode(tSettingDto.themeMode);
           // assert
-          verify(() => storage.put(kSettingStorageKey, tSettingDto.toJson()));
+          verify(() => storage.put(kSettingValueKey, tSettingDto.toJson()));
         },
       );
     },

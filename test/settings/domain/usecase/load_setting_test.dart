@@ -1,6 +1,6 @@
 import 'package:blog/src/core/domain/entities/no_params.dart';
 import 'package:blog/src/settings/domain/entity/setting.dart';
-import 'package:blog/src/settings/domain/usecase/load_theme.dart';
+import 'package:blog/src/settings/domain/usecase/load_setting.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,33 +9,33 @@ import 'mock/mock_i_setting_repository.dart';
 
 void main() {
   late MockISettingRepository mockRepository;
-  late LoadTheme usecase;
+  late LoadSetting usecase;
 
   setUp(
     () {
       mockRepository = MockISettingRepository();
-      usecase = LoadTheme(
+      usecase = LoadSetting(
         repository: mockRepository,
       );
     },
   );
 
-  const tTheme = Setting(themeMode: 'dark');
+  final tTheme = Setting.initial().copyWith(themeMode: "dark");
 
   test(
     'should get theme String from the repository',
     () async {
       /// arrange
-      when(() => mockRepository.loadTheme()).thenAnswer(
-        (invocation) async => const Right(tTheme),
+      when(() => mockRepository.loadSetting()).thenAnswer(
+        (invocation) async => Right(tTheme),
       );
 
       /// act
       final result = await usecase(const NoParams());
 
       /// assert
-      expect(result, const Right(tTheme));
-      verify(mockRepository.loadTheme);
+      expect(result, Right(tTheme));
+      verify(mockRepository.loadSetting);
       verifyNoMoreInteractions(mockRepository);
     },
   );

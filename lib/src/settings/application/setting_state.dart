@@ -25,7 +25,7 @@ class SettingLoadingState implements SettingState {
 
   @override
   Future<void> nextState(SettingStateNotifier context) async {
-    final resultsOrFailure = await context.loadTheme(const NoParams());
+    final resultsOrFailure = await context.loadSetting(const NoParams());
     resultsOrFailure.fold(
       (l) {
         context.failure = l;
@@ -49,7 +49,7 @@ class SettingSavingState implements SettingState {
 
     context.setting = previousSetting.copyWith(themeMode: themeMode);
 
-    final resultsOrFailure = await context.updateTheme(themeMode);
+    final resultsOrFailure = await context.updateThememode(themeMode);
     resultsOrFailure.fold(
       (l) {
         context.failure = l;

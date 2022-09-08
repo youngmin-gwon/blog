@@ -1,7 +1,7 @@
-import 'package:blog/src/settings/domain/usecase/load_theme.dart';
-import 'package:blog/src/settings/domain/usecase/update_theme.dart';
+import 'package:blog/src/settings/domain/usecase/load_setting.dart';
+import 'package:blog/src/settings/domain/usecase/change_thememode.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockUpdateTheme extends Mock implements UpdateTheme {}
+class MockChangeThememode extends Mock implements ChangeThememode {}
 
-class MockLoadTheme extends Mock implements LoadTheme {}
+class MockLoadSetting extends Mock implements LoadSetting {}

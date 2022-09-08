@@ -7,10 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../fixtures/fixture_reader.dart';
 
 void main() {
-  const tSettingsDTO = SettingDTO(
-    themeMode: 'system',
-  );
-  const tSettingsDTODark = SettingDTO(
+  final tSettingDto = SettingDTO.initial();
+  final tSettingDtoDark = tSettingDto.copyWith(
     themeMode: 'dark',
   );
 
@@ -18,7 +16,7 @@ void main() {
     "should be a subclasss of Settings entity",
     () async {
       // assert
-      expect(tSettingsDTO.toDomain(), isA<Setting>());
+      expect(tSettingDto.toDomain(), isA<Setting>());
     },
   );
 
@@ -36,7 +34,7 @@ void main() {
           final result = SettingDTO.fromMap(jsonMap);
 
           /// assert
-          expect(result, tSettingsDTO);
+          expect(result, tSettingDto);
         },
       );
 
@@ -51,7 +49,7 @@ void main() {
           final result = SettingDTO.fromMap(jsonMap);
 
           /// assert
-          expect(result, tSettingsDTODark);
+          expect(result, tSettingDtoDark);
         },
       );
     },
@@ -64,11 +62,12 @@ void main() {
         'should return a JSON map containing the proper data',
         () async {
           /// act
-          final result = tSettingsDTO.toMap();
+          final result = tSettingDto.toMap();
 
           /// assert
           final expectedJsonMap = {
             'themeMode': 'system',
+            'langCode': 'en',
           };
           expect(result, expectedJsonMap);
         },

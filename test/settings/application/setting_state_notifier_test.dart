@@ -12,13 +12,13 @@ import 'package:mocktail/mocktail.dart';
 import 'mock/mock_usecases.dart';
 
 void main() {
-  late MockUpdateTheme mockUpdateTheme;
-  late MockLoadTheme mockLoadTheme;
+  late MockChangeThememode mockChangeThememode;
+  late MockLoadSetting mockLoadSetting;
 
   setUp(
     () {
-      mockUpdateTheme = MockUpdateTheme();
-      mockLoadTheme = MockLoadTheme();
+      mockChangeThememode = MockChangeThememode();
+      mockLoadSetting = MockLoadSetting();
     },
   );
 
@@ -33,8 +33,8 @@ void main() {
       Future<void> Function(ProviderContainer ref) onProcess) async {
     final container = ProviderContainer(
       overrides: [
-        loadThemeProvider.overrideWithValue(mockLoadTheme),
-        updateThemeProvider.overrideWithValue(mockUpdateTheme),
+        loadSettingProvider.overrideWithValue(mockLoadSetting),
+        changeThememodeProvider.overrideWithValue(mockChangeThememode),
       ],
     );
     await onProcess(container);
@@ -55,8 +55,8 @@ void main() {
   group(
     'loadTheme',
     () {
-      const tSettingSystem = Setting(themeMode: 'system');
-      const tSettingDark = Setting(themeMode: 'dark');
+      final tSettingSystem = Setting.initial();
+      final tSettingDark = tSettingSystem.copyWith(themeMode: "dark");
 
       test(
         'should pass the call for the use case',
@@ -64,17 +64,17 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockLoadTheme(any()))
-                  .thenAnswer((_) async => const Right(tSettingDark));
+              when(() => mockLoadSetting(any()))
+                  .thenAnswer((_) async => Right(tSettingDark));
 
               // act
               ref
                   .read(settingStateNotifierProvider.notifier)
                   .mapEventToState(const SettingEvent.loadTheme());
-              await untilCalled(() => mockLoadTheme(any()));
+              await untilCalled(() => mockLoadSetting(any()));
 
               // assert
-              verify(() => mockLoadTheme(const NoParams()));
+              verify(() => mockLoadSetting(const NoParams()));
             },
           );
         },
@@ -86,8 +86,8 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockLoadTheme(any()))
-                  .thenAnswer((_) async => const Right(tSettingDark));
+              when(() => mockLoadSetting(any()))
+                  .thenAnswer((_) async => Right(tSettingDark));
 
               // assert
               expect(ref.read(settingStateNotifierProvider),
@@ -105,7 +105,7 @@ void main() {
                   const SettingState.loading());
 
               // acting
-              await untilCalled(() => mockLoadTheme(any()));
+              await untilCalled(() => mockLoadSetting(any()));
               await Future.microtask(() {});
 
               // assert
@@ -124,7 +124,7 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockLoadTheme(any()))
+              when(() => mockLoadSetting(any()))
                   .thenAnswer((_) async => const Left(Failure.internal("")));
 
               // assert
@@ -143,7 +143,7 @@ void main() {
                   const SettingState.loading());
 
               // acting
-              await untilCalled(() => mockLoadTheme(any()));
+              await untilCalled(() => mockLoadSetting(any()));
               await Future.microtask(() {});
 
               // assert
@@ -153,8 +153,8 @@ void main() {
                   tSettingSystem);
 
               // arrange
-              when(() => mockLoadTheme(any()))
-                  .thenAnswer((_) async => const Right(tSettingDark));
+              when(() => mockLoadSetting(any()))
+                  .thenAnswer((_) async => Right(tSettingDark));
 
               // act
               ref
@@ -166,7 +166,7 @@ void main() {
                   const SettingState.loading());
 
               // acting
-              await untilCalled(() => mockLoadTheme(any()));
+              await untilCalled(() => mockLoadSetting(any()));
               await Future.microtask(() {});
 
               // assert
@@ -186,8 +186,8 @@ void main() {
     () {
       const tTheme = 'dark';
 
-      const tSettingSystem = Setting(themeMode: "system");
-      const tSettingDark = Setting(themeMode: tTheme);
+      final tSettingSystem = Setting.initial();
+      final tSettingDark = tSettingSystem.copyWith(themeMode: tTheme);
 
       test(
         'should pass the call for the use case',
@@ -195,17 +195,17 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockUpdateTheme(any()))
+              when(() => mockChangeThememode(any()))
                   .thenAnswer((_) async => const Right(unit));
 
               // act
               ref
                   .read(settingStateNotifierProvider.notifier)
                   .mapEventToState(const SettingEvent.updateThemeMode(tTheme));
-              await untilCalled(() => mockUpdateTheme(any()));
+              await untilCalled(() => mockChangeThememode(any()));
 
               // assert
-              verify(() => mockUpdateTheme(tTheme));
+              verify(() => mockChangeThememode(tTheme));
             },
           );
         },
@@ -217,7 +217,7 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockUpdateTheme(any()))
+              when(() => mockChangeThememode(any()))
                   .thenAnswer((_) async => const Right(unit));
 
               // assert
@@ -236,7 +236,7 @@ void main() {
                   const SettingState.saving());
 
               // acting
-              await untilCalled(() => mockUpdateTheme(any()));
+              await untilCalled(() => mockChangeThememode(any()));
               await Future.microtask(() {});
 
               // assert
@@ -255,7 +255,7 @@ void main() {
           setUpProviderContainer(
             (ref) async {
               // arrange
-              when(() => mockUpdateTheme(any()))
+              when(() => mockChangeThememode(any()))
                   .thenAnswer((_) async => const Left(Failure.internal("")));
 
               // assert
@@ -274,7 +274,7 @@ void main() {
                   const SettingState.saving());
 
               // acting
-              await untilCalled(() => mockUpdateTheme(any()));
+              await untilCalled(() => mockChangeThememode(any()));
               await Future.microtask(() {});
 
               // assert
@@ -284,7 +284,7 @@ void main() {
                   tSettingSystem);
 
               // arrange
-              when(() => mockUpdateTheme(any()))
+              when(() => mockChangeThememode(any()))
                   .thenAnswer((_) async => const Right(unit));
 
               // act
@@ -297,7 +297,7 @@ void main() {
                   const SettingState.saving());
 
               // acting
-              await untilCalled(() => mockUpdateTheme(any()));
+              await untilCalled(() => mockChangeThememode(any()));
               await Future.microtask(() {});
 
               // assert
