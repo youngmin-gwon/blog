@@ -45,21 +45,45 @@ class SettingSavingState implements SettingState {
   @override
   Future<void> nextState(SettingStateNotifier context) async {
     final previousSetting = context.setting.copyWith();
-    final themeMode = (context.currentEvent as UpdateThemeModeEvent).themeMode;
 
-    context.setting = previousSetting.copyWith(themeMode: themeMode);
+    switch (context.currentEvent.runtimeType) {
+      case ChangeThemeModeEvent:
+        final themeMode =
+            (context.currentEvent as ChangeThemeModeEvent).themeMode;
 
-    final resultsOrFailure = await context.updateThememode(themeMode);
-    resultsOrFailure.fold(
-      (l) {
-        context.failure = l;
-        context.setting = previousSetting;
-        context.setState(const SettingState.error());
-      },
-      (r) {
-        context.setState(const SettingState.stable());
-      },
-    );
+        context.setting = previousSetting.copyWith(themeMode: themeMode);
+
+        final resultsOrFailure = await context.changeThememode(themeMode);
+        resultsOrFailure.fold(
+          (l) {
+            context.failure = l;
+            context.setting = previousSetting;
+            context.setState(const SettingState.error());
+          },
+          (r) {
+            context.setState(const SettingState.stable());
+          },
+        );
+        break;
+      case ChangeLanguageEvent:
+        final language = (context.currentEvent as ChangeLanguageEvent).language;
+
+        context.setting = previousSetting.copyWith(language: language);
+
+        final resultsOrFailure = await context.changeLanguage(language);
+        resultsOrFailure.fold(
+          (l) {
+            context.failure = l;
+            context.setting = previousSetting;
+            context.setState(const SettingState.error());
+          },
+          (r) {
+            context.setState(const SettingState.stable());
+          },
+        );
+
+        break;
+    }
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:blog/src/setting/application/setting_state.dart';
 import 'package:blog/src/setting/application/setting_state_notifier.dart';
 import 'package:blog/src/setting/domain/repository/i_setting_repository.dart';
+import 'package:blog/src/setting/domain/usecase/change_language.dart';
 import 'package:blog/src/setting/domain/usecase/load_setting.dart';
 import 'package:blog/src/setting/domain/usecase/change_thememode.dart';
 import 'package:blog/src/setting/infrastructure/datasource/local/setting_local_hive_service.dart';
@@ -14,7 +15,8 @@ final settingStateNotifierProvider =
     StateNotifierProvider<SettingStateNotifier, SettingState>(
   (ref) => SettingStateNotifier(
     loadSetting: ref.watch(loadSettingProvider),
-    updateThememode: ref.watch(changeThememodeProvider),
+    changeThememode: ref.watch(changeThememodeProvider),
+    changeLanguage: ref.watch(changeLanguageProvider),
   ),
 );
 
@@ -27,6 +29,12 @@ final loadSettingProvider = Provider(
 
 final changeThememodeProvider = Provider(
   (ref) => ChangeThememode(
+    repository: ref.watch(settingRepositoryProvider),
+  ),
+);
+
+final changeLanguageProvider = Provider(
+  (ref) => ChangeLanguage(
     repository: ref.watch(settingRepositoryProvider),
   ),
 );
