@@ -48,6 +48,9 @@ class SettingStateNotifier extends StateNotifier<SettingState> {
       case ChangeThemeModeEvent:
         setState(const SettingState.saving());
         break;
+      case ChangeLanguageEvent:
+        setState(const SettingState.saving());
+        break;
     }
   }
 }

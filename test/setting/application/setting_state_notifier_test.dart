@@ -321,8 +321,8 @@ void main() {
     () {
       const tLanguage = SettingLanguage.korean;
 
-      // final tSettingSystem = Setting.initial();
-      // final tSettingKorean = tSettingSystem.copyWith(language: tLanguage);
+      final tSettingSystem = Setting.initial();
+      final tSettingKorean = tSettingSystem.copyWith(language: tLanguage);
 
       test(
         'should pass the call for the use case',
@@ -345,101 +345,101 @@ void main() {
         },
       );
 
-      // test(
-      //   "should emit [saving, stable] when setting data succeeds",
-      //   () async {
-      //     setUpProviderContainer(
-      //       (ref) async {
-      //         // arrange
-      //         when(() => mockChangeLanguage(any()))
-      //             .thenAnswer((_) async => const Right(unit));
+      test(
+        "should emit [saving, stable] when setting data succeeds",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockChangeLanguage(any()))
+                  .thenAnswer((_) async => const Right(unit));
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.stable());
-      //         expect(ref.read(settingStateNotifierProvider.notifier).setting,
-      //             tSettingSystem);
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-      //         // act
-      //         ref.read(settingStateNotifierProvider.notifier).mapEventToState(
-      //             const SettingEvent.changeLanguage(tLanguage));
+              // act
+              ref.read(settingStateNotifierProvider.notifier).mapEventToState(
+                  const SettingEvent.changeLanguage(tLanguage));
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.saving());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
 
-      //         // acting
-      //         await untilCalled(() => mockChangeLanguage(any()));
-      //         await Future.microtask(() {});
+              // acting
+              await untilCalled(() => mockChangeLanguage(any()));
+              await Future.microtask(() {});
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.stable());
-      //         expect(ref.read(settingStateNotifierProvider.notifier).setting,
-      //             tSettingKorean);
-      //       },
-      //     );
-      //   },
-      // );
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingKorean);
+            },
+          );
+        },
+      );
 
-      // test(
-      //   "should emit [saving, error, saving, stable] when setting data fails at first trial and succeeds finally",
-      //   () async {
-      //     setUpProviderContainer(
-      //       (ref) async {
-      //         // arrange
-      //         when(() => mockChangeLanguage(any()))
-      //             .thenAnswer((_) async => const Left(Failure.cache));
+      test(
+        "should emit [saving, error, saving, stable] when setting data fails at first trial and succeeds finally",
+        () async {
+          setUpProviderContainer(
+            (ref) async {
+              // arrange
+              when(() => mockChangeLanguage(any()))
+                  .thenAnswer((_) async => const Left(Failure.cache));
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.stable());
-      //         expect(ref.read(settingStateNotifierProvider.notifier).setting,
-      //             tSettingSystem);
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-      //         // act
-      //         ref.read(settingStateNotifierProvider.notifier).mapEventToState(
-      //             const SettingEvent.changeLanguage(tLanguage));
+              // act
+              ref.read(settingStateNotifierProvider.notifier).mapEventToState(
+                  const SettingEvent.changeLanguage(tLanguage));
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.saving());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
 
-      //         // acting
-      //         await untilCalled(() => mockChangeLanguage(any()));
-      //         await Future.microtask(() {});
+              // acting
+              await untilCalled(() => mockChangeLanguage(any()));
+              await Future.microtask(() {});
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.error());
-      //         expect(ref.read(settingStateNotifierProvider.notifier).setting,
-      //             tSettingSystem);
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.error());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingSystem);
 
-      //         // arrange
-      //         when(() => mockChangeLanguage(any()))
-      //             .thenAnswer((_) async => const Right(unit));
+              // arrange
+              when(() => mockChangeLanguage(any()))
+                  .thenAnswer((_) async => const Right(unit));
 
-      //         // act
-      //         ref.read(settingStateNotifierProvider.notifier).mapEventToState(
-      //             const SettingEvent.changeLanguage(tLanguage));
+              // act
+              ref.read(settingStateNotifierProvider.notifier).mapEventToState(
+                  const SettingEvent.changeLanguage(tLanguage));
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.saving());
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.saving());
 
-      //         // acting
-      //         await untilCalled(() => mockChangeLanguage(any()));
-      //         await Future.microtask(() {});
+              // acting
+              await untilCalled(() => mockChangeLanguage(any()));
+              await Future.microtask(() {});
 
-      //         // assert
-      //         expect(ref.read(settingStateNotifierProvider),
-      //             const SettingState.stable());
-      //         expect(ref.read(settingStateNotifierProvider.notifier).setting,
-      //             tSettingKorean);
-      //       },
-      //     );
-      //   },
-      // );
+              // assert
+              expect(ref.read(settingStateNotifierProvider),
+                  const SettingState.stable());
+              expect(ref.read(settingStateNotifierProvider.notifier).setting,
+                  tSettingKorean);
+            },
+          );
+        },
+      );
     },
   );
 }
