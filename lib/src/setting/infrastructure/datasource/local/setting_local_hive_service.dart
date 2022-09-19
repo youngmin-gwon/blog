@@ -16,10 +16,13 @@ class SettingLocalHiveService implements SettingLocalService {
   @override
   Future<SettingDTO> get setting async {
     try {
-      final settingsJsonString = _storage.get(kSettingValueKey);
+      final settingJsonString = _storage.get(kSettingValueKey);
 
-      return SettingDTO.fromJson(
-          settingsJsonString ?? SettingDTO.initial().toJson());
+      if (settingJsonString == null) {
+        return SettingDTO.initial();
+      }
+
+      return SettingDTO.fromJson(settingJsonString);
     } catch (e) {
       throw const InternalCacheException(Failure.cache);
     }
@@ -27,29 +30,33 @@ class SettingLocalHiveService implements SettingLocalService {
 
   @override
   Future<void> saveThememode(SettingThememode themeMode) async {
-    _try(
+    _trySaving(
       () async {
-        _storage.put(kSettingValueKey,
-            (await setting).copyWith(themeMode: themeMode).toJson());
+        final newSetting = (await setting).copyWith(themeMode: themeMode);
+        _save(newSetting.toJson());
       },
     );
   }
 
   @override
   Future<void> saveLanguageSetting(SettingLanguage language) async {
-    _try(
+    _trySaving(
       () async {
-        _storage.put(kSettingValueKey,
-            (await setting).copyWith(language: language).toJson());
+        final newSetting = (await setting).copyWith(language: language);
+        _save(newSetting.toJson());
       },
     );
   }
 
-  Future<void> _try(Future<void> Function() function) async {
+  Future<void> _trySaving(Future<void> Function() save) async {
     try {
-      await function();
+      await save();
     } catch (e) {
       throw const InternalCacheException(Failure.cache);
     }
+  }
+
+  Future<void> _save(String rawSetting) async {
+    _storage.put(kSettingValueKey, rawSetting);
   }
 }

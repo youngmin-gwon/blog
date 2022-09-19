@@ -2,6 +2,7 @@ import 'package:blog/src/core/domain/entity/failure.dart';
 
 abstract class IException implements Exception {
   const IException._(this.failure);
+
   final Failure failure;
 }
 

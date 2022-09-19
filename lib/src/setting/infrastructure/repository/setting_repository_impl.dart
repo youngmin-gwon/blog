@@ -16,7 +16,9 @@ class SettingRepositoryImpl implements SettingRepository {
   @override
   Future<Either<Failure, Setting>> loadSetting() async {
     try {
-      return Right((await _localService.setting).toDomain());
+      final settingDto = await _localService.setting;
+      final settingEntity = settingDto.toDomain();
+      return Right(settingEntity);
     } on InternalCacheException catch (e) {
       return Left(e.failure);
     }
@@ -35,9 +37,9 @@ class SettingRepositoryImpl implements SettingRepository {
   }
 
   Future<Either<Failure, Unit>> _updateSettingValue(
-      Future<void> Function() onWhichValue) async {
+      Future<void> Function() update) async {
     try {
-      await onWhichValue();
+      await update();
       return const Right(unit);
     } on InternalCacheException catch (e) {
       return Left(e.failure);

@@ -1,11 +1,15 @@
 import 'package:blog/src/core/key_constant.dart';
 
+/// This long name is adopted to segregate
+/// this in project's domain entity with
+/// enum [Thememode] in flutter material library.
 enum SettingThememode {
   system,
   light,
   dark,
 }
 
+/// This long name is for coherence with [SettingThememode]
 enum SettingLanguage {
   english(kLanguageEnglishCode),
   korean(kLanguageKoreanCode);
