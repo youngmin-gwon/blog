@@ -5,15 +5,15 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'mock/mock_i_setting_repository.dart';
+import 'mock/mock_setting_repository.dart';
 
 void main() {
-  late MockISettingRepository mockRepository;
+  late MockSettingRepository mockRepository;
   late LoadSetting usecase;
 
   setUp(
     () {
-      mockRepository = MockISettingRepository();
+      mockRepository = MockSettingRepository();
       usecase = LoadSetting(
         repository: mockRepository,
       );

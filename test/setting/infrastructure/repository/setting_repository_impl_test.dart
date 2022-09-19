@@ -2,7 +2,7 @@ import 'package:blog/src/core/domain/entity/exception.dart';
 import 'package:blog/src/core/domain/entity/failure.dart';
 import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:blog/src/setting/infrastructure/model/setting_dto.dart';
-import 'package:blog/src/setting/infrastructure/repository/setting_repository.dart';
+import 'package:blog/src/setting/infrastructure/repository/setting_repository_impl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -10,13 +10,13 @@ import 'package:mocktail/mocktail.dart';
 import 'mock/mock_setting_service.dart';
 
 void main() {
-  late SettingRepository repository;
+  late SettingRepositoryImpl repository;
   late MockSettingService mockService;
 
   setUp(
     () {
       mockService = MockSettingService();
-      repository = SettingRepository(
+      repository = SettingRepositoryImpl(
         localService: mockService,
       );
     },

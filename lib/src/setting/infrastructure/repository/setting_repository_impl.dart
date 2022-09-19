@@ -4,12 +4,12 @@ import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:blog/src/setting/infrastructure/datasource/setting_local_service.dart';
 import 'package:dartz/dartz.dart';
 
-import 'package:blog/src/setting/domain/repository/i_setting_repository.dart';
+import 'package:blog/src/setting/domain/repository/setting_repository.dart';
 
-class SettingRepository implements ISettingRepository {
+class SettingRepositoryImpl implements SettingRepository {
   final SettingLocalService _localService;
 
-  const SettingRepository({
+  const SettingRepositoryImpl({
     required SettingLocalService localService,
   }) : _localService = localService;
 

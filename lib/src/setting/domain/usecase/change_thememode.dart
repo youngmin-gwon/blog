@@ -3,12 +3,12 @@ import 'package:blog/src/core/domain/usecase/usecase.dart';
 import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:dartz/dartz.dart';
 
-import 'package:blog/src/setting/domain/repository/i_setting_repository.dart';
+import 'package:blog/src/setting/domain/repository/setting_repository.dart';
 
 class ChangeThememode extends Usecase<Unit, SettingThememode> {
-  final ISettingRepository _repository;
+  final SettingRepository _repository;
   const ChangeThememode({
-    required ISettingRepository repository,
+    required SettingRepository repository,
   }) : _repository = repository;
 
   @override
