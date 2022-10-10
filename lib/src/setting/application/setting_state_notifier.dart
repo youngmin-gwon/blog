@@ -30,27 +30,9 @@ class SettingStateNotifier extends StateNotifier<SettingState> {
 
   Future<void> nextState() async {
     await state.nextState(this);
-
-    if (state is SettingLoadingState || state is SettingSavingState) {
-      await state.nextState(this);
-    }
   }
 
   void setState(SettingState newState) {
     state = newState;
-  }
-
-  void branchSavingAndLoading() {
-    switch (currentEvent.runtimeType) {
-      case LoadThemeEvent:
-        setState(const SettingState.loading());
-        break;
-      case ChangeThemeModeEvent:
-        setState(const SettingState.saving());
-        break;
-      case ChangeLanguageEvent:
-        setState(const SettingState.saving());
-        break;
-    }
   }
 }

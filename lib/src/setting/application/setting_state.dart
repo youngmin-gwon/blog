@@ -1,5 +1,3 @@
-import 'package:blog/src/core/domain/entity/no_params.dart';
-import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/application/setting_state_notifier.dart';
 
 abstract class SettingState {
@@ -16,7 +14,7 @@ class SettingStableState implements SettingState {
 
   @override
   Future<void> nextState(SettingStateNotifier context) async {
-    context.branchSavingAndLoading();
+    context.currentEvent?.setToEachState(context);
   }
 }
 
@@ -25,17 +23,7 @@ class SettingLoadingState implements SettingState {
 
   @override
   Future<void> nextState(SettingStateNotifier context) async {
-    final resultsOrFailure = await context.loadSetting(const NoParams());
-    resultsOrFailure.fold(
-      (l) {
-        context.failure = l;
-        context.setState(const SettingState.error());
-      },
-      (r) {
-        context.setting = r;
-        context.setState(const SettingState.stable());
-      },
-    );
+    await context.currentEvent?.processToState(context);
   }
 }
 
@@ -44,46 +32,7 @@ class SettingSavingState implements SettingState {
 
   @override
   Future<void> nextState(SettingStateNotifier context) async {
-    final previousSetting = context.setting.copyWith();
-
-    switch (context.currentEvent.runtimeType) {
-      case ChangeThemeModeEvent:
-        final themeMode =
-            (context.currentEvent as ChangeThemeModeEvent).themeMode;
-
-        context.setting = previousSetting.copyWith(themeMode: themeMode);
-
-        final resultsOrFailure = await context.changeThememode(themeMode);
-        resultsOrFailure.fold(
-          (l) {
-            context.failure = l;
-            context.setting = previousSetting;
-            context.setState(const SettingState.error());
-          },
-          (r) {
-            context.setState(const SettingState.stable());
-          },
-        );
-        break;
-      case ChangeLanguageEvent:
-        final language = (context.currentEvent as ChangeLanguageEvent).language;
-
-        context.setting = previousSetting.copyWith(language: language);
-
-        final resultsOrFailure = await context.changeLanguage(language);
-        resultsOrFailure.fold(
-          (l) {
-            context.failure = l;
-            context.setting = previousSetting;
-            context.setState(const SettingState.error());
-          },
-          (r) {
-            context.setState(const SettingState.stable());
-          },
-        );
-
-        break;
-    }
+    await context.currentEvent?.processToState(context);
   }
 }
 
@@ -92,6 +41,6 @@ class SettingErrorState implements SettingState {
 
   @override
   Future<void> nextState(SettingStateNotifier context) async {
-    context.branchSavingAndLoading();
+    context.currentEvent?.setToEachState(context);
   }
 }
