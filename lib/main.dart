@@ -7,8 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:blog/src/app.dart';
 
 Future<void> main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 

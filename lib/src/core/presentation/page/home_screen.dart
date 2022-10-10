@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                     builder: (context) => const SprayScreen(),
                   ));
                 },
-                child: const Text("Spray"),
+                child: const Text(""),
               ),
             ],
           ),
