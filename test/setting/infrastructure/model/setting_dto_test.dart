@@ -8,14 +8,15 @@ import '../../../fixtures/fixture_reader.dart';
 
 void main() {
   final tSettingDto = SettingDTO.initial();
-  final tSettingDtoDark = tSettingDto.copyWith(
+  const tSettingDtoDarkEnglish = SettingDTO(
     themeMode: SettingThememode.dark,
+    language: SettingLanguage.english,
   );
 
   test(
     "should be a subclasss of Settings entity",
     () async {
-      // assert
+      /// assert
       expect(tSettingDto.toDomain(), isA<Setting>());
     },
   );
@@ -49,7 +50,7 @@ void main() {
           final result = SettingDTO.fromMap(jsonMap);
 
           /// assert
-          expect(result, tSettingDtoDark);
+          expect(result, tSettingDtoDarkEnglish);
         },
       );
     },
@@ -67,8 +68,9 @@ void main() {
           /// assert
           final expectedJsonMap = {
             'themeMode': 'system',
-            'language': 'english',
+            'language': 'system',
           };
+
           expect(result, expectedJsonMap);
         },
       );

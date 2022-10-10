@@ -18,6 +18,7 @@ class SettingScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingScreen> {
   @override
   Widget build(BuildContext context) {
+    ref.watch(settingStateNotifierProvider);
     final settings = ref.watch(settingStateNotifierProvider.notifier).setting;
     return Scaffold(
       appBar: AppBar(

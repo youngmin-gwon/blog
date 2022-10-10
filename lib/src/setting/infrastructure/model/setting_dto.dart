@@ -22,6 +22,7 @@ class SettingDTO {
   }
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -52,7 +53,7 @@ class SettingDTO {
       themeMode: SettingThememode.values
           .byName(map['themeMode'] ?? SettingThememode.system.name),
       language: SettingLanguage.values
-          .byName(map['language'] ?? SettingLanguage.english.name),
+          .byName(map['language'] ?? SettingLanguage.system.name),
     );
   }
 
@@ -60,7 +61,4 @@ class SettingDTO {
 
   factory SettingDTO.fromJson(String source) =>
       SettingDTO.fromMap(json.decode(source));
-
-  @override
-  int get hashCode => themeMode.hashCode ^ language.hashCode;
 }

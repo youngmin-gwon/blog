@@ -11,8 +11,9 @@ enum SettingThememode {
 
 /// This long name is for coherence with [SettingThememode]
 enum SettingLanguage {
-  english(kLanguageEnglishCode),
-  korean(kLanguageKoreanCode);
+  system(""),
+  english(kLanguageCodeEnglish),
+  korean(kLanguageCodeKorean);
 
   const SettingLanguage(this.code);
   final String code;
@@ -29,10 +30,11 @@ class Setting {
 
   factory Setting.initial() => const Setting(
         themeMode: SettingThememode.system,
-        language: SettingLanguage.english,
+        language: SettingLanguage.system,
       );
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -40,9 +42,6 @@ class Setting {
         other.themeMode == themeMode &&
         other.language == language;
   }
-
-  @override
-  int get hashCode => themeMode.hashCode ^ language.hashCode;
 
   Setting copyWith({
     SettingThememode? themeMode,

@@ -1,9 +1,11 @@
+import 'package:blog/src/core/key_constant.dart';
+import 'package:blog/src/core/presentation/constants/l10n.dart';
 import 'package:blog/src/core/presentation/constants/index.dart';
 import 'package:blog/src/core/presentation/route/app_router.dart';
 import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/dependency_injection.dart';
+import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,6 +32,19 @@ class _AppState extends ConsumerState<App> {
     );
   }
 
+  /// ! warning
+  /// AppLocalizations.of(context) returns null on first frame
+  /// but it rebuilds immediately afterward.
+  Locale _getLocale(Setting setting) {
+    if (setting.language == SettingLanguage.system) {
+      return Locale.fromSubtags(
+          languageCode:
+              AppLocalizations.of(context)?.localeName ?? kLanguageCodeEnglish);
+    } else {
+      return Locale.fromSubtags(languageCode: setting.language.code);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.watch(settingStateNotifierProvider);
@@ -46,9 +61,10 @@ class _AppState extends ConsumerState<App> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      locale: _getLocale(setting),
       supportedLocales: const [
-        Locale('en', ''), // English, no country code
-        Locale('ko', ''),
+        Locale.fromSubtags(languageCode: kLanguageCodeEnglish),
+        Locale.fromSubtags(languageCode: kLanguageCodeKorean),
       ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
