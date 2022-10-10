@@ -5,7 +5,7 @@ import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:blog/src/setting/domain/repository/setting_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class LoadSetting extends Usecase<Setting, NoParams> {
+class LoadSetting implements Usecase<Setting, NoParams> {
   final SettingRepository _repository;
 
   const LoadSetting({

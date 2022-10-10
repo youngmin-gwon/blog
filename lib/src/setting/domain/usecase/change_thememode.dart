@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:blog/src/setting/domain/repository/setting_repository.dart';
 
-class ChangeThememode extends Usecase<Unit, SettingThememode> {
+class ChangeThememode implements Usecase<Unit, SettingThememode> {
   final SettingRepository _repository;
   const ChangeThememode({
     required SettingRepository repository,
