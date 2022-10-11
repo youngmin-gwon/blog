@@ -1,3 +1,3 @@
 # blog
 
-A blog app powered by Flutter
+- A webpage powered by Flutter
