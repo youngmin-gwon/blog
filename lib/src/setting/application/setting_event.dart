@@ -5,9 +5,9 @@ import 'package:blog/src/setting/domain/entity/setting.dart';
 
 abstract class SettingEvent {
   const factory SettingEvent.loadTheme() = LoadThemeEvent;
-  const factory SettingEvent.changeThememode(SettingThememode theme) =
+  const factory SettingEvent.changeThememode(SettingThemeMode theme) =
       ChangeThemeModeEvent;
-  const factory SettingEvent.changeLanguage(SettingLanguage language) =
+  const factory SettingEvent.changeLanguage(Language language) =
       ChangeLanguageEvent;
 
   void setToEachState(SettingStateNotifier context);
@@ -42,7 +42,7 @@ class LoadThemeEvent implements SettingEvent {
 class ChangeThemeModeEvent implements SettingEvent {
   const ChangeThemeModeEvent(this.themeMode);
 
-  final SettingThememode themeMode;
+  final SettingThemeMode themeMode;
 
   @override
   void setToEachState(SettingStateNotifier context) {
@@ -73,7 +73,7 @@ class ChangeThemeModeEvent implements SettingEvent {
 class ChangeLanguageEvent implements SettingEvent {
   const ChangeLanguageEvent(this.language);
 
-  final SettingLanguage language;
+  final Language language;
 
   @override
   void setToEachState(SettingStateNotifier context) {

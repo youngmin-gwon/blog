@@ -19,7 +19,7 @@ void main() {
     },
   );
 
-  const tTheme = SettingThememode.dark;
+  const tTheme = SettingThemeMode.dark;
   test(
     "should update theme from the repository",
     () async {

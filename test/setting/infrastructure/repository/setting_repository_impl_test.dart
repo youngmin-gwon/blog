@@ -23,12 +23,12 @@ void main() {
   );
 
   setUpAll(() {
-    registerFallbackValue(SettingThememode.dark);
-    registerFallbackValue(SettingLanguage.english);
+    registerFallbackValue(SettingThemeMode.dark);
+    registerFallbackValue(Language.english);
   });
 
-  const tTheme = SettingThememode.dark;
-  const tLanguage = SettingLanguage.english;
+  const tTheme = SettingThemeMode.dark;
+  const tLanguage = Language.english;
   final tSettings = Setting.initial();
 
   group(

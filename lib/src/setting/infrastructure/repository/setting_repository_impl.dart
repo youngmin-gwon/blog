@@ -26,12 +26,12 @@ class SettingRepositoryImpl implements SettingRepository {
 
   @override
   Future<Either<Failure, Unit>> updateThememode(
-      SettingThememode themeMode) async {
+      SettingThemeMode themeMode) async {
     return _updateSettingValue(() => _localService.saveThememode(themeMode));
   }
 
   @override
-  Future<Either<Failure, Unit>> updateLanguage(SettingLanguage language) async {
+  Future<Either<Failure, Unit>> updateLanguage(Language language) async {
     return _updateSettingValue(
         () => _localService.saveLanguageSetting(language));
   }

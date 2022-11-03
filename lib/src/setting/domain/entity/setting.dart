@@ -2,20 +2,19 @@ import 'package:blog/src/core/key_constant.dart';
 
 /// This long name is adopted to segregate
 /// this in project's domain entity with
-/// enum [Thememode] in flutter material library.
-enum SettingThememode {
+/// enum [ThemeMode] in flutter material library.
+enum SettingThemeMode {
   system,
   light,
   dark,
 }
 
-/// This long name is for coherence with [SettingThememode]
-enum SettingLanguage {
+enum Language {
   system(""),
   english(kLanguageCodeEnglish),
   korean(kLanguageCodeKorean);
 
-  const SettingLanguage(this.code);
+  const Language(this.code);
   final String code;
 }
 
@@ -25,12 +24,12 @@ class Setting {
     required this.language,
   });
 
-  final SettingThememode themeMode;
-  final SettingLanguage language;
+  final SettingThemeMode themeMode;
+  final Language language;
 
   factory Setting.initial() => const Setting(
-        themeMode: SettingThememode.system,
-        language: SettingLanguage.system,
+        themeMode: SettingThemeMode.system,
+        language: Language.system,
       );
 
   @override
@@ -44,8 +43,8 @@ class Setting {
   }
 
   Setting copyWith({
-    SettingThememode? themeMode,
-    SettingLanguage? language,
+    SettingThemeMode? themeMode,
+    Language? language,
   }) {
     return Setting(
       themeMode: themeMode ?? this.themeMode,

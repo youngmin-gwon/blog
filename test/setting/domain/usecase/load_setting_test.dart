@@ -20,7 +20,7 @@ void main() {
     },
   );
 
-  final tTheme = Setting.initial().copyWith(themeMode: SettingThememode.dark);
+  final tTheme = Setting.initial().copyWith(themeMode: SettingThemeMode.dark);
 
   test(
     'should get theme String from the repository',

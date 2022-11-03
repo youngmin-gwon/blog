@@ -5,14 +5,14 @@ import 'package:dartz/dartz.dart';
 
 import 'package:blog/src/setting/domain/repository/setting_repository.dart';
 
-class ChangeThememode implements Usecase<Unit, SettingThememode> {
+class ChangeThememode implements Usecase<Unit, SettingThemeMode> {
   final SettingRepository _repository;
   const ChangeThememode({
     required SettingRepository repository,
   }) : _repository = repository;
 
   @override
-  Future<Either<Failure, Unit>> call(SettingThememode params) async {
+  Future<Either<Failure, Unit>> call(SettingThemeMode params) async {
     return _repository.updateThememode(params);
   }
 }

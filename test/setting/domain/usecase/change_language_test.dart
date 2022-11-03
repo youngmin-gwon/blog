@@ -18,7 +18,7 @@ void main() {
   );
 
   setUpAll(() {
-    registerFallbackValue(SettingLanguage.english);
+    registerFallbackValue(Language.english);
   });
 
   group(
@@ -28,7 +28,7 @@ void main() {
         "should change language setting behind",
         () async {
           // arrange
-          const tLanguage = SettingLanguage.english;
+          const tLanguage = Language.english;
           when(() => repository.updateLanguage(any()))
               .thenAnswer((_) async => const Right(unit));
 

@@ -36,7 +36,7 @@ class _AppState extends ConsumerState<App> {
   /// AppLocalizations.of(context) returns null on first frame
   /// but it rebuilds immediately afterward.
   Locale _getLocale(Setting setting) {
-    if (setting.language == SettingLanguage.system) {
+    if (setting.language == Language.system) {
       return Locale.fromSubtags(
           languageCode:
               AppLocalizations.of(context)?.localeName ?? kLanguageCodeEnglish);

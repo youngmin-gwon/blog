@@ -9,8 +9,8 @@ import '../../../fixtures/fixture_reader.dart';
 void main() {
   final tSettingDto = SettingDTO.initial();
   const tSettingDtoDarkEnglish = SettingDTO(
-    themeMode: SettingThememode.dark,
-    language: SettingLanguage.english,
+    themeMode: SettingThemeMode.dark,
+    language: Language.english,
   );
 
   test(

@@ -28,8 +28,8 @@ void main() {
     () {
       // any()자리에 해당 Parameter를 넣을 수  있게 만들어줌
       registerFallbackValue(const NoParams());
-      registerFallbackValue(SettingThememode.dark);
-      registerFallbackValue(SettingLanguage.korean);
+      registerFallbackValue(SettingThemeMode.dark);
+      registerFallbackValue(Language.korean);
     },
   );
 
@@ -62,7 +62,7 @@ void main() {
     () {
       final tSettingSystem = Setting.initial();
       final tSettingDark =
-          tSettingSystem.copyWith(themeMode: SettingThememode.dark);
+          tSettingSystem.copyWith(themeMode: SettingThemeMode.dark);
 
       test(
         'should pass the call for the use case',
@@ -189,7 +189,7 @@ void main() {
   group(
     'ChangeTheme',
     () {
-      const tTheme = SettingThememode.dark;
+      const tTheme = SettingThemeMode.dark;
 
       final tSettingSystem = Setting.initial();
       final tSettingDark = tSettingSystem.copyWith(themeMode: tTheme);
@@ -319,7 +319,7 @@ void main() {
   group(
     'ChangeLanguage',
     () {
-      const tLanguage = SettingLanguage.korean;
+      const tLanguage = Language.korean;
 
       final tSettingSystem = Setting.initial();
       final tSettingKorean = tSettingSystem.copyWith(language: tLanguage);
