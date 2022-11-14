@@ -8,7 +8,7 @@ class SettingDTO {
     required this.language,
   });
 
-  final SettingThemeMode themeMode;
+  final SystemTheme themeMode;
   final Language language;
 
   factory SettingDTO.fromDomain(Setting domain) {
@@ -32,7 +32,7 @@ class SettingDTO {
   }
 
   SettingDTO copyWith({
-    SettingThemeMode? themeMode,
+    SystemTheme? themeMode,
     Language? language,
   }) {
     return SettingDTO(
@@ -50,8 +50,8 @@ class SettingDTO {
 
   factory SettingDTO.fromMap(Map<String, dynamic> map) {
     return SettingDTO(
-      themeMode: SettingThemeMode.values
-          .byName(map['themeMode'] ?? SettingThemeMode.system.name),
+      themeMode: SystemTheme.values
+          .byName(map['themeMode'] ?? SystemTheme.system.name),
       language: Language.values.byName(map['language'] ?? Language.system.name),
     );
   }

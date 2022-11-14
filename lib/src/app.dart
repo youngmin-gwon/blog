@@ -62,10 +62,6 @@ class _AppState extends ConsumerState<App> {
         GlobalCupertinoLocalizations.delegate,
       ],
       locale: _getLocale(setting),
-      supportedLocales: const [
-        Locale.fromSubtags(languageCode: kLanguageCodeEnglish),
-        Locale.fromSubtags(languageCode: kLanguageCodeKorean),
-      ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
       theme: AppTheme.light,

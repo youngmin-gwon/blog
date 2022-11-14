@@ -46,7 +46,7 @@ class _SettingsScreenState extends ConsumerState<SettingScreen> {
             if (themeMode != null) {
               ref.read(settingStateNotifierProvider.notifier).mapEventToState(
                     SettingEvent.changeThememode(
-                        SettingThemeMode.values.byName(themeMode.name)),
+                        SystemTheme.values.byName(themeMode.name)),
                   );
             }
           },

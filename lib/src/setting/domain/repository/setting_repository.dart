@@ -4,6 +4,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class SettingRepository {
   Future<Either<Failure, Setting>> loadSetting();
-  Future<Either<Failure, Unit>> updateThememode(SettingThemeMode themeMode);
+  Future<Either<Failure, Unit>> updateThememode(SystemTheme themeMode);
   Future<Either<Failure, Unit>> updateLanguage(Language language);
 }

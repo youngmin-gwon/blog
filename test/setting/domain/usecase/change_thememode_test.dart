@@ -10,6 +10,8 @@ void main() {
   late MockSettingRepository mockRepository;
   late ChangeThememode usecase;
 
+  const tTheme = SystemTheme.dark;
+
   setUp(
     () {
       mockRepository = MockSettingRepository();
@@ -19,11 +21,14 @@ void main() {
     },
   );
 
-  const tTheme = SettingThemeMode.dark;
+  setUpAll(() {
+    registerFallbackValue(SystemTheme.dark);
+  });
+
   test(
     "should update theme from the repository",
     () async {
-      when(() => mockRepository.updateThememode(tTheme)).thenAnswer(
+      when(() => mockRepository.updateThememode(any())).thenAnswer(
         (invocation) async => const Right(unit),
       );
 

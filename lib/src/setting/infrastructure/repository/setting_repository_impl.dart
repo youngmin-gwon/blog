@@ -25,8 +25,7 @@ class SettingRepositoryImpl implements SettingRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updateThememode(
-      SettingThemeMode themeMode) async {
+  Future<Either<Failure, Unit>> updateThememode(SystemTheme themeMode) async {
     return _updateSettingValue(() => _localService.saveThememode(themeMode));
   }
 

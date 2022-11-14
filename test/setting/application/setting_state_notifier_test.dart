@@ -28,7 +28,7 @@ void main() {
     () {
       // any()자리에 해당 Parameter를 넣을 수  있게 만들어줌
       registerFallbackValue(const NoParams());
-      registerFallbackValue(SettingThemeMode.dark);
+      registerFallbackValue(SystemTheme.dark);
       registerFallbackValue(Language.korean);
     },
   );
@@ -43,7 +43,7 @@ void main() {
       ],
     );
     await onProcess(container);
-    addTearDown(container.dispose);
+    // addTearDown(container.dispose);
   }
 
   test(
@@ -61,8 +61,7 @@ void main() {
     'loadTheme',
     () {
       final tSettingSystem = Setting.initial();
-      final tSettingDark =
-          tSettingSystem.copyWith(themeMode: SettingThemeMode.dark);
+      final tSettingDark = tSettingSystem.copyWith(themeMode: SystemTheme.dark);
 
       test(
         'should pass the call for the use case',
@@ -189,7 +188,7 @@ void main() {
   group(
     'ChangeTheme',
     () {
-      const tTheme = SettingThemeMode.dark;
+      const tTheme = SystemTheme.dark;
 
       final tSettingSystem = Setting.initial();
       final tSettingDark = tSettingSystem.copyWith(themeMode: tTheme);

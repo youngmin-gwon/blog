@@ -10,6 +10,7 @@ import 'mock/mock_setting_repository.dart';
 void main() {
   late MockSettingRepository mockRepository;
   late LoadSetting usecase;
+  final tTheme = Setting.initial().copyWith(themeMode: SystemTheme.dark);
 
   setUp(
     () {
@@ -19,8 +20,6 @@ void main() {
       );
     },
   );
-
-  final tTheme = Setting.initial().copyWith(themeMode: SettingThemeMode.dark);
 
   test(
     'should get theme String from the repository',

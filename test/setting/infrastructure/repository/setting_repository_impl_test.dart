@@ -12,6 +12,9 @@ import 'mock/mock_setting_service.dart';
 void main() {
   late SettingRepositoryImpl repository;
   late MockSettingService mockService;
+  const tTheme = SystemTheme.dark;
+  const tLanguage = Language.english;
+  final tSettings = Setting.initial();
 
   setUp(
     () {
@@ -23,13 +26,9 @@ void main() {
   );
 
   setUpAll(() {
-    registerFallbackValue(SettingThemeMode.dark);
+    registerFallbackValue(SystemTheme.dark);
     registerFallbackValue(Language.english);
   });
-
-  const tTheme = SettingThemeMode.dark;
-  const tLanguage = Language.english;
-  final tSettings = Setting.initial();
 
   group(
     'loadTheme',

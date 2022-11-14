@@ -29,7 +29,7 @@ class SettingLocalHiveService implements SettingLocalService {
   }
 
   @override
-  Future<void> saveThememode(SettingThemeMode themeMode) async {
+  Future<void> saveThememode(SystemTheme themeMode) async {
     _trySaving(
       () async {
         final newSetting = (await setting).copyWith(themeMode: themeMode);
