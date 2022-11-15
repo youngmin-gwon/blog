@@ -1,7 +1,17 @@
 {
   "@@locale": "ko",
   "appTitle": "영민의 포트폴리오",
-  "@appTitle": {
-    "description": "작업, 관심사에 관한 모든 것"
+  "setting": "설정",
+  "system": "시스템",
+  "light": "라이트",
+  "dark": "다크",
+  "korean": "한글",
+  "english": "영어",
+  "language": "한글",
+  "screenHomeTitle": "안녕하세요, {name}",
+  "@screenHomeTitle": {
+    "placeholders": {
+      "name": {}
+    }
   }
 }

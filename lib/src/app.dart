@@ -1,34 +1,32 @@
 import 'package:blog/src/core/key_constant.dart';
 import 'package:blog/src/core/presentation/constants/l10n.dart';
 import 'package:blog/src/core/presentation/constants/index.dart';
+import 'package:blog/src/core/presentation/extension/loc.dart';
 import 'package:blog/src/core/presentation/route/app_router.dart';
 import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/dependency_injection.dart';
 import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The Widget that configures your application.
-class App extends ConsumerStatefulWidget {
-  const App({
+class AppWidget extends ConsumerStatefulWidget {
+  const AppWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-  ConsumerState<App> createState() => _AppState();
+  ConsumerState<AppWidget> createState() => _AppState();
 }
 
-class _AppState extends ConsumerState<App> {
+class _AppState extends ConsumerState<AppWidget> {
   @override
   void initState() {
     super.initState();
     Future.microtask(
-      () {
-        ref
-            .read(settingStateNotifierProvider.notifier)
-            .mapEventToState(const SettingEvent.loadTheme());
-      },
+      () => ref
+          .read(settingStateNotifierProvider.notifier)
+          .mapEventToState(const SettingEvent.loadTheme()),
     );
   }
 
@@ -38,8 +36,7 @@ class _AppState extends ConsumerState<App> {
   Locale _getLocale(Setting setting) {
     if (setting.language == Language.system) {
       return Locale.fromSubtags(
-          languageCode:
-              AppLocalizations.of(context)?.localeName ?? kLanguageCodeEnglish);
+          languageCode: context.loc?.localeName ?? kLanguageCodeEnglish);
     } else {
       return Locale.fromSubtags(languageCode: setting.language.code);
     }
@@ -52,18 +49,14 @@ class _AppState extends ConsumerState<App> {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       restorationScopeId: 'app',
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
       locale: _getLocale(setting),
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context)!.appTitle,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      onGenerateTitle: (BuildContext context) => context.loc!.appTitle,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.values.byName(setting.themeMode.name),

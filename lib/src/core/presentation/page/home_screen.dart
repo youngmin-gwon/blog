@@ -1,3 +1,4 @@
+import 'package:blog/src/core/presentation/extension/loc.dart';
 import 'package:blog/src/menu/presentation/screen/spray_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,9 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         iconTheme: Theme.of(context).iconTheme,
+        title: Text(
+          context.loc!.screenHomeTitle("Minsoo"),
+        ),
         actions: [
           IconButton(
             onPressed: () => context.push('/setting'),

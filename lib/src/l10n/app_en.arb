@@ -1,7 +1,17 @@
 {
   "@@locale": "en",
   "appTitle": "Youngmin's Portfolio",
-  "@appTitle": {
-    "description": "All about him including works, interests"
+  "setting": "Setting",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "korean": "Korean",
+  "english": "English",
+  "language": "English",
+  "screenHomeTitle": "Welcome, {name}",
+  "@screenHomeTitle": {
+    "placeholders": {
+      "name": {}
+    }
   }
 }

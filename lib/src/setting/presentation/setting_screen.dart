@@ -1,3 +1,5 @@
+import 'package:blog/src/core/presentation/constants/l10n.dart';
+import 'package:blog/src/core/presentation/extension/loc.dart';
 import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/dependency_injection.dart';
 import 'package:blog/src/setting/domain/entity/setting.dart';
@@ -25,7 +27,7 @@ class _SettingsScreenState extends ConsumerState<SettingScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Setting',
+          AppLocalizations.of(context)!.appTitle,
           style: TextStyle(
             color: Theme.of(context).textTheme.headline6?.color,
           ),
@@ -38,31 +40,66 @@ class _SettingsScreenState extends ConsumerState<SettingScreen> {
         //
         // When a user selects a theme from the dropdown list, the
         // SettingsController is updated, which rebuilds the MaterialApp.
-        child: DropdownButton<ThemeMode>(
-          // Read the selected themeMode from the controller
-          value: ThemeMode.values.byName(settings.themeMode.name),
-          // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: (ThemeMode? themeMode) {
-            if (themeMode != null) {
-              ref.read(settingStateNotifierProvider.notifier).mapEventToState(
-                    SettingEvent.changeThememode(
-                        SystemTheme.values.byName(themeMode.name)),
-                  );
-            }
-          },
-          items: const [
-            DropdownMenuItem(
-              value: ThemeMode.system,
-              child: Text('System Theme'),
+        child: Column(
+          children: [
+            DropdownButton<ThemeMode>(
+              // Read the selected themeMode from the controller
+              value: ThemeMode.values.byName(settings.themeMode.name),
+              // Call the updateThemeMode method any time the user selects a theme.
+              onChanged: (ThemeMode? themeMode) {
+                if (themeMode != null) {
+                  ref
+                      .read(settingStateNotifierProvider.notifier)
+                      .mapEventToState(
+                        SettingEvent.changeThememode(
+                            SystemTheme.values.byName(themeMode.name)),
+                      );
+                }
+              },
+              items: [
+                DropdownMenuItem(
+                  value: ThemeMode.system,
+                  child: Text(context.loc!.system),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.light,
+                  child: Text(context.loc!.light),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.dark,
+                  child: Text(context.loc!.dark),
+                )
+              ],
             ),
-            DropdownMenuItem(
-              value: ThemeMode.light,
-              child: Text('Light Theme'),
+            DropdownButton<Language>(
+              // Read the selected themeMode from the controller
+              value: Language.values.byName(settings.language.name),
+              // Call the updateThemeMode method any time the user selects a theme.
+              onChanged: (Language? language) {
+                if (language != null) {
+                  ref
+                      .read(settingStateNotifierProvider.notifier)
+                      .mapEventToState(
+                        SettingEvent.changeLanguage(
+                            Language.values.byName(language.name)),
+                      );
+                }
+              },
+              items: [
+                DropdownMenuItem(
+                  value: Language.system,
+                  child: Text(context.loc!.system),
+                ),
+                DropdownMenuItem(
+                  value: Language.english,
+                  child: Text(context.loc!.english),
+                ),
+                DropdownMenuItem(
+                  value: Language.korean,
+                  child: Text(context.loc!.korean),
+                )
+              ],
             ),
-            DropdownMenuItem(
-              value: ThemeMode.dark,
-              child: Text('Dark Theme'),
-            )
           ],
         ),
       ),

@@ -15,7 +15,7 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [hiveStringBoxProvider.overrideWithValue(stringBoxStorage)],
-      child: const App(),
+      child: const AppWidget(),
     ),
   );
 }
