@@ -1,5 +1,4 @@
 import 'package:blog/src/core/presentation/extension/loc.dart';
-import 'package:blog/src/menu/presentation/screen/spray_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,11 +28,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SprayScreen(),
-                  ));
-                },
+                onPressed: () {},
                 child: const Text(""),
               ),
             ],

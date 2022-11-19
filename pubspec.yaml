@@ -19,6 +19,8 @@ dependencies:
   hive_flutter:
   flutter_riverpod:
   intl:
+  dynamic_color: ^1.5.4
+  material_color_utilities: ^0.1.5
 
 dev_dependencies:
   flutter_gen_runner:
