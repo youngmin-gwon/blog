@@ -6,6 +6,7 @@ import 'package:blog/src/core/presentation/route/app_router.dart';
 import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/dependency_injection.dart';
 import 'package:blog/src/setting/domain/entity/setting.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,18 +49,45 @@ class _AppState extends ConsumerState<AppWidget> {
     final setting = ref.watch(settingStateNotifierProvider.notifier).setting;
     final router = ref.watch(appRouterProvider);
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      restorationScopeId: 'app',
-      routerDelegate: router.routerDelegate,
-      routeInformationParser: router.routeInformationParser,
-      locale: _getLocale(setting),
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      onGenerateTitle: (BuildContext context) => context.loc!.appTitle,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.values.byName(setting.themeMode.name),
+    final settings = ValueNotifier(
+      const ThemeSetting(
+        sourceColor: Colors.indigo,
+        themeMode: ThemeMode.system,
+      ),
     );
+
+    return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+      return ThemeProvider(
+        lightDynamic: lightDynamic,
+        darkDynamic: darkDynamic,
+        setting: settings,
+        child: NotificationListener<ThemeSettingChange>(
+          onNotification: (notification) {
+            settings.value = notification.setting;
+            return true;
+          },
+          child: ValueListenableBuilder<ThemeSetting>(
+              valueListenable: settings,
+              builder: (context, value, _) {
+                final theme = ThemeProvider.of(context);
+                return MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
+                  restorationScopeId: 'app',
+                  routerDelegate: router.routerDelegate,
+                  routeInformationParser: router.routeInformationParser,
+                  locale: _getLocale(setting),
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  onGenerateTitle: (BuildContext context) =>
+                      context.loc!.appTitle,
+                  theme: theme.light(settings.value.sourceColor),
+                  darkTheme: theme.dark(settings.value.sourceColor),
+                  themeMode: theme.themeMode,
+                );
+              }),
+        ),
+      );
+    });
   }
 }

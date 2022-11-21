@@ -26,7 +26,7 @@ class AppRouter extends GoRouter {
             GoRoute(
               path: '/',
               pageBuilder: (context, state) =>
-                  const MaterialPage(child: HomeScreen()),
+                  const MaterialPage(child: RootScreen()),
             ),
             GoRoute(
               path: '/setting',
