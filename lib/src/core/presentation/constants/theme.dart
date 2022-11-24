@@ -1,3 +1,4 @@
+import 'package:blog/src/setting/domain/entity/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'package:material_color_utilities/blend/blend.dart';
@@ -49,7 +50,7 @@ class ThemeProvider extends InheritedWidget {
   }
 
   ThemeMode get themeMode {
-    return setting.value.themeMode;
+    return ThemeMode.values.byName(setting.value.mode.name);
   }
 
   ThemeData theme(BuildContext context, [Color? targetColor]) {
@@ -201,11 +202,19 @@ class ThemeSettingChange extends Notification {
 class ThemeSetting {
   const ThemeSetting({
     required this.sourceColor,
-    required this.themeMode,
+    required this.mode,
   });
 
   final Color sourceColor;
-  final ThemeMode themeMode;
+  final SystemTheme mode;
+
+  ThemeSetting copyWith({
+    Color? sourceColor,
+    SystemTheme? mode,
+  }) {
+    return ThemeSetting(
+        sourceColor: sourceColor ?? this.sourceColor, mode: mode ?? this.mode);
+  }
 }
 
 class CustomColor {

@@ -50,9 +50,9 @@ class _AppState extends ConsumerState<AppWidget> {
     final router = ref.watch(appRouterProvider);
 
     final settings = ValueNotifier(
-      const ThemeSetting(
+      ThemeSetting(
         sourceColor: Colors.indigo,
-        themeMode: ThemeMode.system,
+        mode: setting.themeMode,
       ),
     );
 

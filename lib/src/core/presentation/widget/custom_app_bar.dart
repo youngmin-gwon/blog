@@ -1,3 +1,4 @@
+import 'package:blog/src/core/presentation/constants/index.dart';
 import 'package:blog/src/core/presentation/extension/loc.dart';
 import 'package:blog/src/setting/application/setting_event.dart';
 import 'package:blog/src/setting/dependency_injection.dart';
@@ -36,13 +37,13 @@ class _CustomToolBarState extends ConsumerState<CustomToolBar> {
     if (Theme.of(context).brightness == Brightness.light) {
       return SystemTheme.dark;
     } else {
-      return SystemTheme.dark;
+      return SystemTheme.light;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(settingStateNotifierProvider);
+    ref.watch(settingStateNotifierProvider.notifier);
     return AnimatedPadding(
       duration: kThemeChangeDuration,
       padding: widget.padding,
@@ -51,9 +52,20 @@ class _CustomToolBarState extends ConsumerState<CustomToolBar> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           GestureDetector(
-            onTap: () => ref
-                .read(settingStateNotifierProvider.notifier)
-                .mapEventToState(SettingEvent.changeThememode(targetTheme)),
+            onTap: () {
+              final setting = ThemeProvider.of(context)
+                  .setting
+                  .value
+                  .copyWith(mode: targetTheme);
+
+              ThemeSettingChange(
+                setting: setting,
+              ).dispatch(context);
+
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(SettingEvent.changeThememode(targetTheme));
+            },
             child: Icon(
               targetTheme == SystemTheme.light
                   ? Icons.wb_sunny_outlined
@@ -63,9 +75,11 @@ class _CustomToolBarState extends ConsumerState<CustomToolBar> {
           ),
           const SizedBox(width: 12),
           GestureDetector(
-            onTap: () => ref
-                .read(settingStateNotifierProvider.notifier)
-                .mapEventToState(SettingEvent.changeLanguage(targetLanguage)),
+            onTap: () {
+              ref
+                  .read(settingStateNotifierProvider.notifier)
+                  .mapEventToState(SettingEvent.changeLanguage(targetLanguage));
+            },
             child: Text(
               targetLanguage.code.toUpperCase(),
               style: TextStyle(fontSize: widget.iconSize / 2),
