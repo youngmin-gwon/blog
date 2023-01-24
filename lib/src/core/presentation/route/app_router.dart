@@ -1,5 +1,6 @@
-import 'package:blog/src/core/presentation/page/home_screen.dart';
 import 'package:blog/src/core/presentation/page/error_screen.dart';
+import 'package:blog/src/core/presentation/page/home_screen.dart';
+import 'package:blog/src/portfolio/presentation/fishcake_screen.dart';
 import 'package:blog/src/setting/presentation/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,12 @@ class AppRouter extends GoRouter {
               path: '/setting',
               pageBuilder: (context, state) => const MaterialPage(
                 child: SettingScreen(),
+              ),
+            ),
+            GoRoute(
+              path: '/portfolio',
+              pageBuilder: (context, state) => const MaterialPage(
+                child: FishcakeAuthScreen(),
               ),
             ),
           ],

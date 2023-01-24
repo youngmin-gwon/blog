@@ -56,17 +56,18 @@ class _AppState extends ConsumerState<AppWidget> {
       ),
     );
 
-    return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-      return ThemeProvider(
-        lightDynamic: lightDynamic,
-        darkDynamic: darkDynamic,
-        setting: settings,
-        child: NotificationListener<ThemeSettingChange>(
-          onNotification: (notification) {
-            settings.value = notification.setting;
-            return true;
-          },
-          child: ValueListenableBuilder<ThemeSetting>(
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        return ThemeProvider(
+          lightDynamic: lightDynamic,
+          darkDynamic: darkDynamic,
+          setting: settings,
+          child: NotificationListener<ThemeSettingChange>(
+            onNotification: (notification) {
+              settings.value = notification.setting;
+              return true;
+            },
+            child: ValueListenableBuilder<ThemeSetting>(
               valueListenable: settings,
               builder: (context, value, _) {
                 final theme = ThemeProvider.of(context);
@@ -85,9 +86,11 @@ class _AppState extends ConsumerState<AppWidget> {
                   darkTheme: theme.dark(settings.value.sourceColor),
                   themeMode: theme.themeMode,
                 );
-              }),
-        ),
-      );
-    });
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

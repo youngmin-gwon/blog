@@ -1,6 +1,7 @@
 import 'package:blog/src/core/presentation/widget/custom_app_bar.dart';
 import 'package:blog/src/core/presentation/widget/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RootScreen extends StatelessWidget {
   const RootScreen({Key? key}) : super(key: key);
@@ -53,6 +54,12 @@ class HomeTabletPage extends StatelessWidget {
           Expanded(
             child: Container(
               color: Colors.green,
+              child: ElevatedButton(
+                onPressed: () {
+                  context.go("/portfolio");
+                },
+                child: const Text("Portfolio"),
+              ),
             ),
           ),
         ],
@@ -73,8 +80,10 @@ class HomeDesktopPage extends StatelessWidget {
             children: [
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {},
-                child: const Text(""),
+                onPressed: () {
+                  context.go("/portfolio");
+                },
+                child: const Text("Portfolio"),
               ),
             ],
           ),
